@@ -3,10 +3,12 @@ package raisetech.StudentManagement.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import raisetech.StudentManagement.StudentRepository;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentsCourses;
 import java.util.stream.Collectors;
+import raisetech.StudentManagement.domain.StudentDetail;
 
 
 @Service
@@ -41,6 +43,23 @@ public class StudentService {
     return repository.searchStudentsCourses().stream()
         .filter(course -> "Javaコース".equals(course.getCourseName()))
         .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public void registerStudent(StudentDetail studentDetail) {
+    Student student = studentDetail.getStudent();
+
+    // students テーブルにINSERT
+    repository.insertStudent(student);
+
+    // StudentDetailからコース一覧を取得（↓このために後述のgetterが必要）
+    List<StudentsCourses> courses = studentDetail.getCourses();
+
+    // 各コースに studentId をセットし、登録
+    for (StudentsCourses course : courses) {
+      course.setStudentId(student.getId()); // 自動採番されたIDをセット
+      repository.insertCourse(course);
+    }
   }
 
 }
