@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import raisetech.StudentManagement.domain.StudentDetail;
 
 
+
 @Service
 public class StudentService {
 
@@ -25,22 +26,29 @@ public class StudentService {
     // 全ての学生データを取得
     List<Student> allStudents = repository.search();
 
-    // 30代の学生のみを抽出
-//    List<Student> filteredStudents = allStudents.stream()
-//        .filter(student -> student.getAge() >= 30 && student.getAge() < 40)
-//        .collect(Collectors.toList());
-
     return allStudents;
   }
 
   public List<StudentsCourses> searchStudentsCourseList() {
     // すべてのコース情報を取得
-    return repository.searchStudentsCourses();
+    return repository.searchStudentsCoursesList();
   }
+
+  public StudentDetail searchStudent(String id){
+    Student student = repository.searchStudent(id);
+    List<StudentsCourses> studentsCourses = repository.searchStudentsCourses(student.getId());
+
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentsCourses(studentsCourses);
+
+    return studentDetail;
+  }
+
 
   public List<StudentsCourses> searchStudentsJavaCourseList() {
     // すべてのコース情報を取得し、JAVAコースのみを抽出
-    return repository.searchStudentsCourses().stream()
+    return repository.searchStudentsCoursesList().stream()
         .filter(course -> "Javaコース".equals(course.getCourseName()))
         .collect(Collectors.toList());
   }
@@ -52,13 +60,35 @@ public class StudentService {
     // students テーブルにINSERT
     repository.insertStudent(student);
 
-    // StudentDetailからコース一覧を取得（↓このために後述のgetterが必要）
-    List<StudentsCourses> courses = studentDetail.getCourses();
+    // StudentDetailからコースを1件取得
+    StudentsCourses course = studentDetail.getCourses().get(0); // 一人一コース前提
+    course.setStudentId(student.getId()); // 自動採番されたIDをセット
 
-    // 各コースに studentId をセットし、登録
+    // 登録
+    repository.insertCourse(course);
+
+
+  }
+
+  @Transactional
+  public void updateStudent(StudentDetail studentDetail) {
+    Student student = studentDetail.getStudent();
+    if (student == null) {
+      throw new IllegalArgumentException("studentがnullです");
+    }
+
+    repository.updateStudent(student);
+
+    List<StudentsCourses> courses = studentDetail.getCourses();
+    if (courses == null || courses.isEmpty()) {
+      throw new IllegalArgumentException("coursesがnullまたは空です");
+    }
+
     for (StudentsCourses course : courses) {
-      course.setStudentId(student.getId()); // 自動採番されたIDをセット
-      repository.insertCourse(course);
+      if (course != null) {
+        course.setStudentId(student.getId());
+        repository.updateCourse(course);
+      }
     }
   }
 
