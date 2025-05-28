@@ -32,7 +32,7 @@
   </div>
   <div>
     <label for="age">年齢:</label>
-    <input type="text" id="age" th:field="*{student.age}" required />
+    <input type="number" id="age" th:field="*{student.age}" required />
   </div>
   <div>
     <label>性別:</label>
@@ -54,7 +54,6 @@
     <label for="id">受講コースID</label>
     <input type="text" id="id" th:field="*{courses[0].id}" />
     <label for="course_name">受講コース名:</label>
-    <input type="hidden" th:field="*{courses[0].id}" />
     <input type="hidden" th:field="*{courses[0].studentId}" />
     <select id="course_name" th:field="*{courses[0].courseName}">
       <option value="">選択してください</option>

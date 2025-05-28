@@ -59,6 +59,11 @@ public class StudentController {
     if (result.hasErrors()) {
       return "updateStudent";
     }
+
+    if (studentDetail.getCourses() == null || studentDetail.getCourses().isEmpty()) {
+      studentDetail.setCourses(Arrays.asList(new StudentsCourses()));
+    }
+
     service.updateStudent(studentDetail);
     return "redirect:/studentList";
   }
