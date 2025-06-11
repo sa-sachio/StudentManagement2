@@ -51,8 +51,13 @@
     <input type="text" id="remark" th:field="*{student.remark}" required />
   </div>
   <div>
-    <label for="id">受講コースID</label>
-    <input type="text" id="id" th:field="*{courses[0].id}" />
+    <label for="iDeleted">キャンセル:</label>
+    <input type="hidden" name="student.i_deleted" value="false"/>
+    <input type="checkbox" id="iDeleted" name="student.i_deleted" value="true"/>
+  </div>
+  <div>
+    <label for="studentCourseId">受講コースID</label>
+    <input type="text" id="studentCourseId" th:field="*{courses[0].id}" />
     <label for="course_name">受講コース名:</label>
     <input type="hidden" th:field="*{courses[0].studentId}" />
     <select id="course_name" th:field="*{courses[0].courseName}">
@@ -65,9 +70,6 @@
   </div>
   <div>
     <button type="submit">更新</button>
-    <a th:href="@{/studentList}">
-      <button type="button">キャンセル</button>
-    </a>
   </div>
 </form>
 

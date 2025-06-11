@@ -23,10 +23,7 @@ public class StudentService {
   }
 
   public List<Student> searchStudentList() {
-    // 全ての学生データを取得
-    List<Student> allStudents = repository.search();
-
-    return allStudents;
+    return repository.search(); // これで十分
   }
 
   public List<StudentsCourses> searchStudentsCourseList() {
@@ -40,7 +37,7 @@ public class StudentService {
 
     StudentDetail studentDetail = new StudentDetail();
     studentDetail.setStudent(student);
-    studentDetail.setStudentsCourses(studentsCourses);
+    studentDetail.setCourses(studentsCourses);
 
     return studentDetail;
   }
@@ -60,13 +57,10 @@ public class StudentService {
     // students テーブルにINSERT
     repository.insertStudent(student);
 
-    // StudentDetailからコースを1件取得
-    StudentsCourses course = studentDetail.getCourses().get(0); // 一人一コース前提
-    course.setStudentId(student.getId()); // 自動採番されたIDをセット
-
-    // 登録
-    repository.insertCourse(course);
-
+    for (StudentsCourses course : studentDetail.getCourses()) {
+      course.setStudentId(student.getId());
+      repository.insertCourse(course);
+    }
 
   }
 

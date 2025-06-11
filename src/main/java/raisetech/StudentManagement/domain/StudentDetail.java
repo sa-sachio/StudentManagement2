@@ -15,11 +15,12 @@ public class StudentDetail {
 
   // getter / setter
 
-  public Student getStudent() {
-    return student;
+  //public Student getStudent() {
+    //return student;
   }
 
-  public void setStudent(Student student) {
+  /**
+   * public void setStudent(Student student) {
     this.student = student;
   }
 
@@ -36,3 +37,4 @@ public class StudentDetail {
   }
 
 }
+   */

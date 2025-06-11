@@ -64,9 +64,14 @@ public class StudentController {
       studentDetail.setCourses(Arrays.asList(new StudentsCourses()));
     }
 
+    // チェックボックスで送信された値（true/false）
+    Boolean deleted = studentDetail.getStudent().getIDeleted();
+    System.out.println("キャンセル状態（deleted）: " + deleted);
+
     service.updateStudent(studentDetail);
     return "redirect:/studentList";
   }
+
   @GetMapping("/newStudent")
   public String newStudentForm(Model model) {
     StudentDetail detail = new StudentDetail();
@@ -91,6 +96,7 @@ public class StudentController {
     model.addAttribute("courseNames", courseNames); // <- 追加
     return "updateStudent";
   }
+
 }
 
 
