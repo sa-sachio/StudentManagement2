@@ -51,9 +51,9 @@
     <input type="text" id="remark" th:field="*{student.remark}" required />
   </div>
   <div>
-    <label for="iDeleted">キャンセル:</label>
-    <input type="hidden" name="student.i_deleted" value="false"/>
-    <input type="checkbox" id="iDeleted" name="student.i_deleted" value="true"/>
+<!--    <input type="hidden" th:field="*{student.iDeleted}" value="false" />-->
+    <input type="checkbox" th:field="*{student.iDeleted}" value="true" />
+    <label th:for="${#ids.prev('student.iDeleted')}">キャンセル</label>
   </div>
   <div>
     <label for="studentCourseId">受講コースID</label>

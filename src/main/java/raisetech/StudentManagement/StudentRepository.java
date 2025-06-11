@@ -14,7 +14,8 @@ import raisetech.StudentManagement.data.StudentsCourses;
 @Mapper
 public interface StudentRepository {
 
-  @Select("SELECT * FROM students WHERE i_deleted = false")
+//  @Select("SELECT * FROM students WHERE i_deleted = false")
+  @Select("SELECT * FROM students")
   @Results(id = "studentResultMap", value = {
       @Result(property = "id", column = "id"),
       @Result(property = "name", column = "name"),

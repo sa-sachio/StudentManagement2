@@ -19,4 +19,12 @@ public class Student {
   private String sex;
   private String remark;
   private Boolean iDeleted;
+
+  public Boolean getIDeleted() {
+    return iDeleted;
+  }
+
+  public void setIDeleted(Boolean iDeleted) {
+    this.iDeleted = iDeleted;
+  }
 }
