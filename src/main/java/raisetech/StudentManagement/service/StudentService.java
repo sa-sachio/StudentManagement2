@@ -53,15 +53,12 @@ public class StudentService {
   @Transactional
   public void registerStudent(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
-
     // students テーブルにINSERT
     repository.insertStudent(student);
-
     for (StudentsCourses course : studentDetail.getCourses()) {
       course.setStudentId(student.getId());
       repository.insertCourse(course);
     }
-
   }
 
   @Transactional

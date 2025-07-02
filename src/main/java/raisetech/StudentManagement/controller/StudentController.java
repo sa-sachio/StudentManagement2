@@ -3,6 +3,7 @@ package raisetech.StudentManagement.controller;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
@@ -54,21 +57,15 @@ public class StudentController {
   }
 
   @PostMapping("/updateStudent")
-  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) {
-      return "updateStudent";
-    }
-
-    if (studentDetail.getCourses() == null || studentDetail.getCourses().isEmpty()) {
-      studentDetail.setCourses(Arrays.asList(new StudentsCourses()));
-    }
-
+  public ResponseEntity<String/*StudentDetai*/> updateStudent(@RequestBody StudentDetail studentDetail) {
+//    if (studentDetail.getCourses() == null || studentDetail.getCourses().isEmpty()) {
+//      studentDetail.setCourses(Arrays.asList(new StudentsCourses()));
+//    }
     // チェックボックスで送信された値（true/false）
-    Boolean deleted = studentDetail.getStudent().getIDeleted();
-    System.out.println("キャンセル状態（deleted）: " + deleted);
-
+//    Boolean deleted = studentDetail.getStudent().getIDeleted();
+//    System.out.println("キャンセル状態（deleted）: " + deleted);
     service.updateStudent(studentDetail);
-    return "redirect:/studentList";
+    return ResponseEntity.ok ("更新処理が成功しました。");
   }
 
   @GetMapping("/newStudent")
@@ -94,6 +91,11 @@ public class StudentController {
     model.addAttribute("studentDetail", studentDetail);
     model.addAttribute("courseNames", courseNames); // <- 追加
     return "updateStudent";
+  }
+
+  @GetMapping("/searchStudent")
+  public StudentDetail searchStudentByQuery(@RequestParam String id) {
+    return service.searchStudent(id);
   }
 
 }
