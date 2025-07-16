@@ -41,19 +41,24 @@ public class StudentController {
     return converter.convertStudentDetails(students, studnetsCourses);
   }
 
+  @GetMapping("/student/form/{id}/")
+  public StudentDetail getStudent(@PathVariable String id){
+    return service.searchStudent(id);
+  }
+
 
   @PostMapping("/registerStudent")
-  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if(result.hasErrors()){
-      return "registerStudent";
-    }
+  public ResponseEntity<String> registerStudent(@RequestBody StudentDetail studentDetail) {
+//    if(result.hasErrors()){
+//      return "registerStudent";
+//    }
     System.out.println("studentDetail: " + studentDetail);
     System.out.println("student: " + studentDetail.getStudent());
     System.out.println("courses: " + studentDetail.getCourses());
     //System.out.println(studentDetail.getStudent().getName() + "さんが新規受講生として登録されました。");
     // サービスを通じて新しい学生を保存する
     service.updateStudent(studentDetail);
-    return "redirect:/studentList";
+    return ResponseEntity.ok ("登録処理が成功しました。");
   }
 
   @PostMapping("/updateStudent")
