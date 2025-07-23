@@ -21,26 +21,39 @@ import raisetech.StudentManagement.domain.StudentDetail;
 import raisetech.StudentManagement.service.StudentService;
 import org.springframework.ui.Model;
 
+/**
+ *  受講生の検索や登録、更新などを行うREST API として実行されるControllerです。
+ */
 
 @RestController
 public class StudentController {
 
   private StudentService service;
-  private StudentConverter converter;
+
 
   @Autowired
-  public StudentController(StudentService service, StudentConverter converter) {
+  public StudentController(StudentService service) {
     this.service = service;
-    this.converter = converter;
   }
 
+  /**
+   * 受講生一覧検索です。
+   * 全件検索を行うので、条件検索は行いません。
+   *
+   * @return 受講生一覧(全件)
+   */
   @GetMapping("/studentList")
   public List<StudentDetail> getStudentList() {
-    List<Student> students = service.searchStudentList();
-    List<StudentsCourses> studnetsCourses = service.searchStudentsCourseList();
-    return converter.convertStudentDetails(students, studnetsCourses);
+    return service.searchStudentList();
   }
 
+  /**
+   * 受講生検索です。
+   * IDに紐づく任意の受講生の情報を取得します。
+   *
+   * @param id 受講生ID
+   * @return 受講生
+   */
   @GetMapping("/student/form/{id}/")
   public StudentDetail getStudent(@PathVariable String id){
     return service.searchStudent(id);
@@ -48,29 +61,25 @@ public class StudentController {
 
 
   @PostMapping("/registerStudent")
-  public ResponseEntity<String> registerStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
 //    if(result.hasErrors()){
 //      return "registerStudent";
 //    }
-    System.out.println("studentDetail: " + studentDetail);
-    System.out.println("student: " + studentDetail.getStudent());
-    System.out.println("courses: " + studentDetail.getCourses());
+//    System.out.println("studentDetail: " + studentDetail);
+//    System.out.println("student: " + studentDetail.getStudent());
+//    System.out.println("courses: " + studentDetail.getCourses());
     //System.out.println(studentDetail.getStudent().getName() + "さんが新規受講生として登録されました。");
     // サービスを通じて新しい学生を保存する
-    service.updateStudent(studentDetail);
-    return ResponseEntity.ok ("登録処理が成功しました。");
+//    service.updateStudent(studentDetail);
+    StudentDetail savedDetail = service.registerStudent(studentDetail);
+    return ResponseEntity.ok(savedDetail);
   }
 
   @PostMapping("/updateStudent")
-  public ResponseEntity<String/*StudentDetai*/> updateStudent(@RequestBody StudentDetail studentDetail) {
-//    if (studentDetail.getCourses() == null || studentDetail.getCourses().isEmpty()) {
-//      studentDetail.setCourses(Arrays.asList(new StudentsCourses()));
-//    }
-    // チェックボックスで送信された値（true/false）
-//    Boolean deleted = studentDetail.getStudent().getIDeleted();
-//    System.out.println("キャンセル状態（deleted）: " + deleted);
+  public String updateStudent(@ModelAttribute StudentDetail studentDetail, Model model) {
     service.updateStudent(studentDetail);
-    return ResponseEntity.ok ("更新処理が成功しました。");
+    model.addAttribute("studentDetail", studentDetail);
+    return "updateStudent"; // または "redirect:/somewhere"
   }
 
   @GetMapping("/newStudent")
