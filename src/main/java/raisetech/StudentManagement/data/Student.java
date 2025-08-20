@@ -1,5 +1,6 @@
 package raisetech.StudentManagement.data;
 
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.annotations.Result;

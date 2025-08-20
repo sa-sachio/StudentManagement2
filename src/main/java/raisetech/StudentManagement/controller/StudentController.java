@@ -1,9 +1,11 @@
 package raisetech.StudentManagement.controller;
 
+import jakarta.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +19,14 @@ import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domain.StudentDetail;
 import raisetech.StudentManagement.service.StudentService;
 import org.springframework.ui.Model;
+import jakarta.validation.constraints.Size;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 /**
  *  受講生の検索や登録、更新などを行うREST API として実行されるControllerです。
  */
-
+@Validated
 @RestController
 public class StudentController {
 
@@ -61,7 +66,7 @@ public class StudentController {
    * @return　実行結果
    */
   @PostMapping("/registerStudent")
-  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<StudentDetail> registerStudent(@RequestBody @Valid StudentDetail studentDetail) {
 //    if(result.hasErrors()){
 //      return "registerStudent";
 //    }
@@ -118,7 +123,12 @@ public class StudentController {
 
   @GetMapping("/searchStudent")
   public StudentDetail searchStudentByQuery(@RequestParam String id) {
-    return service.searchStudent(id);
+    System.out.println("検索ID = " + id);
+    StudentDetail detail = service.searchStudent(id);
+    if (detail == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID=" + id + " の受講生は存在しません");
+    }
+    return detail;
   }
 
   @PutMapping("/student/{id}")
