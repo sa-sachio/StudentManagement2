@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.TestException;
+import raisetech.StudentManagement.exception.InvalidFullWidthCharacterException;
 import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domain.StudentDetail;
+import raisetech.StudentManagement.exception.InvalidFullWidthCharacterException;
 import raisetech.StudentManagement.service.StudentService;
 import org.springframework.ui.Model;
 import jakarta.validation.constraints.Size;
@@ -117,7 +119,7 @@ public class StudentController {
     return "registerStudent";
   }
    */
-  
+
   @GetMapping("/student/{id}")
   public String getStudent(@PathVariable String id, Model model) {
     StudentDetail studentDetail = service.searchStudent(id);
@@ -137,12 +139,19 @@ public class StudentController {
   @GetMapping("/searchStudent")
   public StudentDetail searchStudentByQuery(@RequestParam String id) {
     System.out.println("検索ID = " + id);
+
+    // 全角文字が含まれているかチェック
+    if (id.matches(".*[\\u3000-\\u9FFF\\uFF00-\\uFFEF].*")) {
+      throw new InvalidFullWidthCharacterException("全角文字が含まれているので無効です。");
+    }
+
     StudentDetail detail = service.searchStudent(id);
     if (detail == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID=" + id + " の受講生は存在しません");
     }
     return detail;
   }
+
 
   @PutMapping("/student/{id}")
   public ResponseEntity<StudentDetail> updateStudent(
@@ -155,6 +164,11 @@ public class StudentController {
 
   @ExceptionHandler(TestException.class)
   public ResponseEntity<String> handleTestException(TestException ex){
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(InvalidFullWidthCharacterException.class)
+  public ResponseEntity<String> handleInvalidFullWidthCharacter(InvalidFullWidthCharacterException ex) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
   }
 }
