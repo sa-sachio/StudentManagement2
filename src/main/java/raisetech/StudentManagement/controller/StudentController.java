@@ -1,11 +1,13 @@
 package raisetech.StudentManagement.controller;
 
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import raisetech.StudentManagement.TestException;
 import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domain.StudentDetail;
 import raisetech.StudentManagement.service.StudentService;
@@ -44,8 +47,18 @@ public class StudentController {
    * @return 受講生詳細一覧(全件)
    */
   @GetMapping("/studentList")
-  public List<StudentDetail> getStudentList() {
-    return service.searchStudentList();
+  public List<StudentDetail> getStudentList() throws TestException {
+    throw new TestException(
+        "現在のこのAPIは利用できません。URLは「studentList」ではなく「students」を利用してください。");
+  }
+
+  public void readFile(String path) throws IOException {
+    throw new IOException("ファイルが見つかりません: " + path);
+  }
+
+  @GetMapping("/readFile")
+  public void triggerIOException() throws IOException {
+    readFile("dummy.txt");
   }
 
   /**
@@ -140,6 +153,10 @@ public class StudentController {
     return ResponseEntity.ok(studentDetail);
   }
 
+  @ExceptionHandler(TestException.class)
+  public ResponseEntity<String> handleTestException(TestException ex){
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+  }
 }
 
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StudentDetail xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <student>
+    <id></id>
+    <name></name>
+    <kanaName></kanaName>
+    <nickname></nickname>
+    <email></email>
+    <area></area>
+    <age></age>
+    <sex></sex>
+    <remark></remark>
+    <iDeleted></iDeleted>
+  </student>
+
+  <studentCourseList>
+    <studentCourse>
+      <id></id>
+      <studentId></studentId>
+      <courseName></courseName>
+      <courseStartAt></courseStartAt>
+      <courseEndAt></courseEndAt>
+    </studentCourse>
+    <!-- 複数の course を入れられる -->
+  </studentCourseList>
+
+</StudentDetail>

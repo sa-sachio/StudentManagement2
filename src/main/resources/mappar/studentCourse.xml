@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StudentCourse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <id></id>
+  <studentId></studentId>
+  <courseName></courseName>
+  <courseStartAt></courseStartAt>
+  <courseEndAt></courseEndAt>
+</StudentCourse>
