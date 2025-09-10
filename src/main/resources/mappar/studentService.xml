@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+  <!-- コンポーネントスキャンを使わず、明示的に Bean を登録する場合 -->
+  <bean id="studentService" class="raisetech.StudentManagement.service.StudentService">
+    <constructor-arg ref="studentRepository"/>
+    <constructor-arg ref="studentConverter"/>
+  </bean>
+
+  <!-- Repository の Bean -->
+  <bean id="studentRepository" class="raisetech.StudentManagement.StudentRepository"/>
+
+  <!-- Converter の Bean -->
+  <bean id="studentConverter" class="raisetech.StudentManagement.controller.converter.StudentConverter"/>
+
+  <!-- トランザクション管理を有効化 -->
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <!-- DataSource や TransactionManager の設定（例） -->
+  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost:3306/student_db"/>
+    <property name="username" value="root"/>
+    <property name="password" value="password"/>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+
+</beans>

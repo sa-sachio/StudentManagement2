@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="raisetech.StudentManagement.mapper.StudentMapper">
+
+  <!-- Student のマッピング定義 -->
+  <resultMap id="StudentResultMap" type="raisetech.StudentManagement.data.Student">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="kanaName" column="kana_name"/>
+    <result property="nickname" column="nickname"/>
+    <result property="email" column="email"/>
+    <result property="area" column="area"/>
+    <result property="age" column="age"/>
+    <result property="sex" column="sex"/>
+    <result property="remark" column="remark"/>
+    <result property="iDeleted" column="i_deleted"/>
+  </resultMap>
+
+  <!-- id で学生を検索 -->
+  <select id="getStudentById"
+    parameterType="string"
+    resultMap="StudentResultMap">
+    SELECT *
+    FROM students
+    WHERE id = #{id}
+  </select>
+
+</mapper>

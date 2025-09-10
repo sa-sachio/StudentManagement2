@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="raisetech.StudentManagement.controller.converter.StudentConverter">
+
+  <!-- StudentDetail のマッピング -->
+  <resultMap id="StudentDetailMap" type="raisetech.StudentManagement.domain.StudentDetail">
+    <!-- Student オブジェクト -->
+    <association property="student" javaType="raisetech.StudentManagement.data.Student">
+      <id property="id" column="student_id"/>
+      <result property="name" column="student_name"/>
+      <result property="kanaName" column="student_kana_name"/>
+      <result property="nickname" column="student_nickname"/>
+      <result property="email" column="student_email"/>
+      <result property="age" column="student_age"/>
+      <result property="sex" column="student_sex"/>
+      <result property="remark" column="student_remark"/>
+    </association>
+
+    <!-- StudentCourse のリスト -->
+    <collection property="studentCourseList"
+      ofType="raisetech.StudentManagement.data.StudentCourse">
+      <id property="id" column="course_id"/>
+      <result property="studentId" column="student_id"/>
+      <result property="courseName" column="

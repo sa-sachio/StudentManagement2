@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="raisetech.StudentManagement.StudentRepository">
+
+  <!-- 受講生の全件検索 -->
+  <select id = "search" resultType="raisetech.StudentManagement.data.Student">
+    SELECT * FROM students
+  </select>
+
+  <!-- 受講生の検索 -->
+  <select id="searchStudent" parameterType="String" resultType="raisetech.StudentManagement.data.Student">
+    SELECT * FROM students
+    WHERE id = #{id}
+  </select>
+
+  <insert id="insertStudent" parameterType="raisetech.StudentManagement.data.Student" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO students
+    (name, kana_name, nickname, email, area, age, sex, remark, i_deleted)
+    VALUES
+    (#{name}, #{kanaName}, #{nickname}, #{email}, #{area}, #{age}, #{sex}, #{remark}, #{iDeleted})
+  </insert>
+
+  <update id="updateStudent" parameterType="raisetech.StudentManagement.data.Student">
+    UPDATE students
+    SET
+    name = #{name},
+    kana_name = #{kanaName},
+    nickname = #{nickname},
+    email = #{email},
+    area = #{area},
+    age = #{age},
+    sex = #{sex},
+    remark = #{remark},
+    i_deleted = #{iDeleted}
+    WHERE id = #{id}
+  </update>
+
+  <update id="deleteStudent" parameterType="String">
+    UPDATE students
+    SET i_deleted = true
+    WHERE id = #{id}
+  </update>
+
+  <select id="searchStudentCourseList" resultType="raisetech.StudentManagement.data.StudentCourse">
+    SELECT * FROM students_courses
+  </select>
+
+  <select id="searchStudentCourse" parameterType="String" resultType="raisetech.StudentManagement.data.StudentCourse">
+    SELECT * FROM students_courses
+    WHERE student_id = #{studentId}
+  </select>
+
+</mapper>
