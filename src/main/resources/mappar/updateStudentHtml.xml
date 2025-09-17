@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>受講生詳細</title>
+  </head>
+  <body>
+    <h1>受講生詳細</h1>
+
+    <form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
+      <!-- hidden ID -->
+      <input type="hidden" th:field="*{student.id}"/>
+
+      <div>
+        <label for="name">名前:</label>
+        <input type="text" id="name" th:field="*{student.name}" required="required"/>
+      </div>
+      <div>
+        <label for="kana_name">カナ名:</label>
+        <input type="text" id="kana_name" th:field="*{student.kanaName}" required="required"/>
+      </div>
+      <div>
+        <label for="nickName">ニックネーム:</label>
+        <input type="text" id="nickName" th:field="*{student.nickname}" required="required"/>
+      </div>
+      <div>
+        <label for="email">メールアドレス:</label>
+        <input type="text" id="email" th:field="*{student.email}" required="required"/>
+      </div>
+      <div>
+        <label for="area">地域:</label>
+        <input type="text" id="area" th:field="*{student.area}" required="required"/>
+      </div>
+      <div>
+        <label for="age">年齢:</label>
+        <input type="number" id="age" th:field="*{student.age}" required="required"/>
+      </div>
+      <div>
+        <label>性別:</label>
+        <label for="male">
+          <input type="radio" id="male" th:field="*{student.sex}" value="男"/> 男
+        </label>
+        <label for="female">
+          <input type="radio" id="female" th:field="*{student.sex}" value="女"/> 女
+        </label>
+        <label for="others">
+          <input type="radio" id="others" th:field="*{student.sex}" value="その他"/> その他
+        </label>
+      </div>
+      <div>
+        <label for="remark">備考:<
