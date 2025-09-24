@@ -1,6 +1,8 @@
 package raisetech.StudentManagement.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.Arrays;
@@ -59,7 +61,8 @@ public class StudentController {
   public void readFile(String path) throws IOException {
     throw new IOException("ファイルが見つかりません: " + path);
   }
-
+  @Operation(summary = "throwsメソッド",
+              description = "エラー時に返されるthrowsメソッドです。")
   @GetMapping("/readFile")
   public void triggerIOException() throws IOException {
     readFile("dummy.txt");
@@ -71,6 +74,15 @@ public class StudentController {
    * @param id 受講生ID
    * @return 受講生詳細
    */
+
+  @Operation(
+      summary = "受講生検索（ID指定）",
+      description = "指定したIDに紐づく受講生の詳細を返します。",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "成功"),
+          @ApiResponse(responseCode = "500", description = "該当する受講生が見つからない", content = @Content)
+      }
+  )
   @GetMapping("/student/form/{id}/")
   public StudentDetail getStudent(@PathVariable String id){
     return service.searchStudent(id);
@@ -82,7 +94,14 @@ public class StudentController {
    * @param studentDetail 受講生詳細
    * @return　実行結果
    */
-  @Operation(summary = "受講生登録", description = "受講生を登録します。")
+  @Operation(
+      summary = "受講生登録",
+      description = "受講生を新規登録します。",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "登録成功"),
+          @ApiResponse(responseCode = "400", description = "不正なリクエスト", content = @Content)
+      }
+  )
   @PostMapping("/registerStudent")
   public ResponseEntity<StudentDetail> registerStudent(@RequestBody @Valid StudentDetail studentDetail) {
 //    if(result.hasErrors()){
@@ -104,6 +123,11 @@ public class StudentController {
    * @param studentDetail 受講生詳細
    * @return 実行結果
    */
+  @Operation (summary = "受講生詳細更新", description = "受講生詳細情報の更新と、キャンセルフラグの更新を行います。(論理削除)",
+              responses = {
+                @ApiResponse(responseCode = "200", description = "更新成功")
+              }
+              )
   @PutMapping("/updateStudent")
   public String updateStudent(@ModelAttribute StudentDetail studentDetail, Model model) {
     service.updateStudent(studentDetail);
@@ -122,7 +146,14 @@ public class StudentController {
     return "registerStudent";
   }
    */
-
+  @Operation(
+      summary = "受講生TCP接続等表示(ID指定)",
+      description = "指定IDのTCP接続状況、文字数、書体の種類、更新日時、TCPの最大接続維持時間がわかります。",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "検索成功"),
+          @ApiResponse(responseCode = "500", description = "該当する受講生が見つからない", content = @Content)
+      }
+  )
   @GetMapping("/student/{id}")
   public String getStudent(@PathVariable String id, Model model) {
     StudentDetail studentDetail = service.searchStudent(id);
@@ -139,6 +170,10 @@ public class StudentController {
     return "updateStudent";
   }
 
+  @Operation(
+      summary = "受講生検索メソッド",
+      description = "受講生検索(ID指定)利用時にreturnで呼び出されるメソッドです。"
+  )
   @GetMapping("/searchStudent")
   public StudentDetail searchStudentByQuery(@RequestParam String id) {
     System.out.println("検索ID = " + id);
@@ -155,7 +190,14 @@ public class StudentController {
     return detail;
   }
 
-
+  @Operation(
+      summary = "受講生更新",
+      description = "指定IDの受講生を更新します。キャンセルフラグによる論理削除も可能です。",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "更新成功"),
+          @ApiResponse(responseCode = "404", description = "該当する受講生が見つからない", content = @Content)
+      }
+  )
   @PutMapping("/student/{id}")
   public ResponseEntity<StudentDetail> updateStudent(
       @PathVariable String id,
