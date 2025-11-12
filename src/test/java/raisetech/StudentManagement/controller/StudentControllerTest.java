@@ -9,10 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.validation.ConstraintViolation;
+//import jakarta.validation.Validation;
 import jakarta.validation.Validation;
 import java.util.List;
 import java.util.Set;
-import javax.xml.validation.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +25,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.domain.StudentDetail;
 import raisetech.StudentManagement.service.StudentService;
+import jakarta.validation.Validator;
+import jakarta.validation.Validation;
+import jakarta.validation.ConstraintViolation;
 
 @WebMvcTest(StudentController.class)
 class StudentControllerTest {
@@ -41,9 +44,9 @@ class StudentControllerTest {
   void 受講生詳細の一覧検索が実行できて空のリストが返ってくること() throws Exception {
     when(service.searchStudentList()).thenReturn(List.of(new StudentDetail()));
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/studentList"))
+    mockMvc.perform(MockMvcRequestBuilders.get("/students"))
         .andExpect(status().isOk())
-        .andExpect(content().json("[]"));
+        .andExpect(content().json("[{\"student\":null,\"studentCourseList\":null}]"));
 
     verify(service, times(1)).searchStudentList();
   }

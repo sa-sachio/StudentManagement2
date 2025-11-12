@@ -46,6 +46,13 @@ public class StudentController {
     this.service = service;
   }
 
+  @Operation(summary = "受講生一覧取得", description = "全受講生の詳細情報を取得します。")
+  @GetMapping("/students")
+  public List<StudentDetail> getStudents() {
+    return service.searchStudentList();
+  }
+
+
   /**
    * 受講生詳細の一覧検索です。全件検索を行うので、条件検索は行いません。
    *
