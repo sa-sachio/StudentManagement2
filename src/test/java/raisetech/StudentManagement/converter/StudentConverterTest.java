@@ -22,9 +22,7 @@ class StudentConverterTest {
   @Test
   void 受講生ごとに対応するコースが正しくマッピングされること() {
     // --- 準備 ---
-    Student student1 = new Student();
-    student1.setId("1");
-    student1.setName("田中太郎");
+    Student student1 = createStudent();
 
     Student student2 = new Student();
     student2.setId("2");
@@ -112,5 +110,11 @@ class StudentConverterTest {
 
     assertEquals(1, result.size());
     assertTrue(result.get(0).getStudentCourseList().isEmpty());
+  }
+  private static Student createStudent() {
+    Student student1 = new Student();
+    student1.setId("1");
+    student1.setName("田中太郎");
+    return student1;
   }
 }
