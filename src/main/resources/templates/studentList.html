@@ -1,43 +1,90 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>受講生一覧</title>
 </head>
+
 <body>
+
+<!-- 共通ヘッダー -->
+<div th:replace="~{common/header :: header}"></div>
+
 <h1>受講生一覧</h1>
+
+<form th:action="@{/view/studentList}" method="get"
+      th:object="${studentSearchCondition}">
+
+  <input type="hidden" name="searched" value="true"/>
+
+  名前：
+  <input type="text" th:field="*{name}" />
+
+  メール：
+  <input type="text" th:field="*{email}" />
+
+  地域：
+  <input type="text" th:field="*{area}" />
+
+  性別：
+  <select th:field="*{gender}">
+    <option value="">指定なし</option>
+    <option value="男性">男性</option>
+    <option value="女性">女性</option>
+  </select>
+
+  <button type="submit">検索</button>
+
+</form>
+
+<br>
+
 <table border="1">
-  <thead>
+
   <tr>
     <th>ID</th>
     <th>名前</th>
-    <th>カナ名</th>
-    <th>ニックネーム</th>
-    <th>メールアドレス</th>
+    <th>メール</th>
     <th>地域</th>
-    <th>年齢</th>
     <th>性別</th>
-    <th>備考</th>
-    <th>キャンセル</th>
+    <th>更新</th>
+    <th>削除</th>
   </tr>
-  </thead>
-  <tbody>
+
   <tr th:each="studentDetail : ${studentList}">
-    <td th:text="${studentDetail.student.id}">1</td>
+
+    <td th:text="${studentDetail.student.id}"></td>
+    <td th:text="${studentDetail.student.name}"></td>
+    <td th:text="${studentDetail.student.email}"></td>
+    <td th:text="${studentDetail.student.area}"></td>
+    <td th:text="${studentDetail.student.sex}"></td>
+
     <td>
-      <a href="studentList" th:href="@{/student/{id}(id=${studentDetail.student.id})}"th:text="${studentDetail.student.name}">山田太郎</a>
+      <a th:href="@{/view/student/{id}(id=${studentDetail.student.id})}">
+        更新
+      </a>
     </td>
-    <td th:text="${studentDetail.student.kanaName}">ヤマダタロウ</td>
-    <td th:text="${studentDetail.student.nickname}">タロ</td>
-    <td th:text="${studentDetail.student.email}">taro@example.comtaro@example.com</td>
-    <td th:text="${studentDetail.student.area}">東京</td>
-    <td th:text="${studentDetail.student.age}">25</td>
-    <td th:text="${studentDetail.student.sex}">男性</td>
-    <td th:text="${studentDetail.student.remark}">簿記3級</td>
+
     <td>
-      <input type="checkbox" th:checked="${studentDetail.student.iDeleted}" disabled/>
+      <form th:action="@{/view/deleteStudent}" method="post">
+        <input type="hidden"
+               name="id"
+               th:value="${studentDetail.student.id}">
+        <button type="submit"
+                onclick="return confirm('この受講生を削除しますか？');">
+          削除
+        </button>
+      </form>
     </td>
   </tr>
-  </tbody>
+
 </table>
+
+<br>
+
+<div th:if="${message}">
+  <p th:text="${message}" style="color: green;"></p>
+</div>
+
 </body>
 </html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2>受講生情報更新</h2>
+
+<form th:action="@{/view/updateStudent}"
+      th:object="${studentDetail}"
+      method="post">
+
+  <input type="hidden" th:field="*{student.id}" />
+
+  <table border="1">
+    <tr>
+      <th>項目</th>
+      <th>現在の情報</th>
+      <th>変更後</th>
+    </tr>
+
+    <tr>
+      <td>名前</td>
+      <td th:text="*{student.name}"></td>
+      <td><input type="text" th:field="*{student.name}" /></td>
+    </tr>
+
+    <tr>
+      <td>メール</td>
+      <td th:text="*{student.email}"></td>
+      <td><input type="email" th:field="*{student.email}" /></td>
+    </tr>
+
+    <tr>
+      <td>地域</td>
+      <td th:text="*{student.area}"></td>
+      <td>
+        <select th:field="*{student.area}">
+          <option value="東京">東京</option>
+          <option value="大阪">大阪</option>
+          <option value="福岡">福岡</option>
+        </select>
+      </td>
+    </tr>
+
+  </table>
+
+  <button type="submit">更新</button>
+</form>
+
+</body>
+</html>
