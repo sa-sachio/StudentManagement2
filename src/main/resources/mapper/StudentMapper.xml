@@ -59,31 +59,6 @@
     </where>
   </select>
 
-  <select id="search"
-    parameterType="raisetech.StudentManagement.data.StudentSearchCondition"
-    resultMap="studentResultMap">
-
-    SELECT *
-    FROM students
-    <where>
-      <if test="name != null and name != ''">
-        AND name LIKE CONCAT('%', #{name}, '%')
-      </if>
-
-      <if test="email != null and email != ''">
-        AND email LIKE CONCAT('%', #{email}, '%')
-      </if>
-
-      <if test="area != null and area != ''">
-        AND area = #{area}
-      </if>
-
-      <if test="gender != null and gender != ''">
-        AND sex = #{gender}
-      </if>
-    </where>
-  </select>
-
   <insert id="insertStudent"
     parameterType="raisetech.StudentManagement.data.Student"
     useGeneratedKeys="true"
@@ -153,5 +128,36 @@
     VALUES (#{courseId}, #{status})
   </insert>
 
+  <select id="search"
+    parameterType="raisetech.StudentManagement.data.StudentSearchCondition"
+    resultMap="studentResultMap">
+
+    SELECT *
+    FROM students
+    <where>
+
+      <if test="id != null and id != ''">
+        AND id = #{id}
+      </if>
+
+
+      <if test="name != null and name != ''">
+        AND name LIKE CONCAT('%', #{name}, '%')
+      </if>
+
+      <if test="email != null and email != ''">
+        AND email LIKE CONCAT('%', #{email}, '%')
+      </if>
+
+      <if test="area != null and area != ''">
+        AND area LIKE CONCAT('%', #{area}, '%')
+      </if>
+
+      <if test="gender != null and gender != ''">
+        AND sex = #{gender}
+      </if>
+
+    </where>
+  </select>
 
 </mapper>

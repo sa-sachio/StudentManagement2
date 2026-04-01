@@ -35,21 +35,20 @@ public class StudentViewController {
   /** 一覧画面 */
   @GetMapping("/studentList")
   public String studentList(
-      @ModelAttribute("studentSearchCondition") StudentSearchCondition condition,
-      @RequestParam(required = false) Boolean searched,
+      @Valid StudentSearchCondition condition,
+      BindingResult bindingResult,
       Model model) {
 
-    // 常に一覧を取得する
-    List<StudentDetail> studentList =
-        service.searchStudentDetailList(condition);
+    model.addAttribute("studentSearchCondition", condition);
 
+    if (bindingResult.hasErrors()) {
+      return "studentList"; // エラー時はそのまま画面表示
+    }
+
+    List<StudentDetail> studentList = service.searchStudentDetailList(condition);
     model.addAttribute("studentList", studentList);
-
     return "studentList";
   }
-
-
-
 
   /** 新規登録画面 */
   @GetMapping("/newStudent")
