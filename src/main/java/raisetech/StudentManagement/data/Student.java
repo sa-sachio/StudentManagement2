@@ -4,41 +4,44 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import jakarta.validation.constraints.NotNull;
+
 
 @Schema(description = "受講生詳細")
 @Getter
 @Setter
 public class Student {
 
-  @NotBlank
   private String id;
 
-  @NotBlank
+  @NotBlank(message = "記入してください")
   private String name;
 
-  @NotBlank
+  @NotBlank(message = "記入してください")
   private String kanaName;
 
-  @NotBlank
+  @NotBlank(message = "記入してください")
   private String nickname;
 
-  @NotBlank
+  @NotBlank(message = "記入してください")
   @Email
   private String email;
 
-  @NotBlank
+  @NotBlank(message = "記入してください")
   private String area;
-
+  @NotNull(message = "記入してください")
+  @Min(value = 0, message = "0以上を入力してください")
   private Integer age;
+
 
   @NotBlank
   private String sex;
 
   private String remark;
-  private Boolean iDeleted;
+
+
 }

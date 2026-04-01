@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>申込状況追加</title>
+</head>
+<body>
+
+<!-- TOPボタン -->
+<div th:replace="~{common/header :: header}"></div>
+
+<h2>申込状況追加</h2>
+
+<form th:action="@{/view/addApplicationStatus}" method="post">
+
+    コースID：
+    <input type="number" name="courseId" required />
+
+    申込状況：
+    <select name="status">
+      <option value="仮申込">仮申込</option>
+      <option value="本申込">本申込</option>
+      <option value="受講中">受講中</option>
+      <option value="受講終了">受講終了</option>
+    </select>
+
+    <button type="submit">追加</button>
+
+</form>
+
+<!-- メッセージ表示 -->
+<div th:if="${message}">
+  <p th:text="${message}" style="color: green;"></p>
+</div>
+
+</body>
+</html>

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import raisetech.StudentManagement.StudentRepository;
-import raisetech.StudentManagement.controller.converter.StudentConverter;
+import raisetech.StudentManagement.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domain.StudentDetail;
@@ -55,11 +55,11 @@ class StudentServiceTest {
     // --- 準備 ---
     String id = "1";
     Student student = new Student();
-    student.setId(1);
+    student.setId("1");
     student.setName("田中太郎");
 
     StudentCourse course = new StudentCourse();
-    course.setStudentId(1);
+    course.setStudentId("1");
     course.setCourseName("Java基礎");
 
     List<StudentCourse> courseList = new ArrayList<>();
@@ -92,14 +92,14 @@ class StudentServiceTest {
     assertThrows(NullPointerException.class, () -> sut.searchStudent(id));
 
     verify(repository, times(1)).searchStudent(id);
-    verify(repository, times(0)).searchStudentCourse(Mockito.anyInt());
+    verify(repository, times(0)).searchStudentCourse(Mockito.anyString());
   }
 
   @Test
   void 受講生登録_IDeletedがnullのときfalseが設定され_リポジトリが正しく呼ばれること() {
     // --- 準備 ---
     Student student = new Student();
-    student.setId(1);
+    student.setId("1");
     student.setName("田中太郎");
     student.setIDeleted(null);  // null の場合、false に補正される想定
 
@@ -127,8 +127,8 @@ class StudentServiceTest {
     assertFalse(student.getIDeleted());
 
     // コースにstudentIdが設定されていること
-    assertEquals(1, course1.getStudentId());
-    assertEquals(1, course2.getStudentId());
+    assertEquals("1", course1.getStudentId());
+    assertEquals("1", course2.getStudentId());
 
     // リポジトリ呼び出し検証
     verify(repository, times(1)).insertStudent(student);
@@ -150,7 +150,7 @@ class StudentServiceTest {
   void 受講生更新_受講生とコースが正常に更新されること() {
     // --- 準備 ---
     Student student = new Student();
-    student.setId(1);
+    student.setId("1");
     student.setName("田中太郎");
 
     StudentCourse course1 = new StudentCourse();
@@ -173,8 +173,8 @@ class StudentServiceTest {
 
     // --- 検証 ---
     // studentIdが正しくセットされている
-    assertEquals(1, course1.getStudentId());
-    assertEquals(1, course2.getStudentId());
+    assertEquals("1", course1.getStudentId());
+    assertEquals("1", course2.getStudentId());
 
     // updateStudentが呼ばれている
     verify(repository, times(1)).updateStudent(student);
@@ -200,7 +200,7 @@ class StudentServiceTest {
   void 受講生更新_coursesがnullの場合は例外が発生すること() {
     // --- 準備 ---
     Student student = new Student();
-    student.setId(1);
+    student.setId("1");
     student.setName("田中太郎");
 
     StudentDetail detail = new StudentDetail(student, null);
@@ -218,7 +218,7 @@ class StudentServiceTest {
   void 受講生更新_coursesが空の場合は例外が発生すること() {
     // --- 準備 ---
     Student student = new Student();
-    student.setId(1);
+    student.setId("1");
     student.setName("田中太郎");
 
     StudentDetail detail = new StudentDetail(student, new ArrayList<>());

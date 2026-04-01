@@ -4,35 +4,60 @@
   <title>受講生詳細</title>
 </head>
 <body>
+<div th:replace="~{common/header :: header}"></div>
 <h1>受講生詳細</h1>
 
-<form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
+<form th:action="@{/view/updateStudent}" th:object="${studentDetail}" method="post">
   <!-- hidden ID -->
   <input type="hidden" th:field="*{student.id}" />
 
   <div>
     <label for="name">名前:</label>
-    <input type="text" id="name" th:field="*{student.name}" required />
+    <input type="text" id="name" th:field="*{student.name}" />
+    <span style="color:red"
+          th:if="${#fields.hasErrors('student.name')}"
+          th:errors="*{student.name}">
+  </span>
   </div>
   <div>
     <label for="kana_name">カナ名:</label>
-    <input type="text" id="kana_name" th:field="*{student.kanaName}" required />
+    <input type="text" id="kana_name" th:field="*{student.kanaName}" />
+    <span style="color:red"
+          th:if="${#fields.hasErrors('student.kanaName')}"
+          th:errors="*{student.kanaName}">
+  </span>
   </div>
   <div>
     <label for="nickName">ニックネーム:</label>
-    <input type="text" id="nickName" th:field="*{student.nickname}" required />
+    <input type="text" id="nickName" th:field="*{student.nickname}" />
+    <span style="color:red"
+          th:if="${#fields.hasErrors('student.nickname')}"
+          th:errors="*{student.nickname}">
+  </span>
   </div>
   <div>
     <label for="email">メールアドレス:</label>
-    <input type="text" id="email" th:field="*{student.email}" required />
+    <input type="text" id="email" th:field="*{student.email}" />
+    <span style="color:red"
+          th:if="${#fields.hasErrors('student.email')}"
+          th:errors="*{student.email}">
+  </span>
   </div>
   <div>
     <label for="area">地域:</label>
-    <input type="text" id="area" th:field="*{student.area}" required />
+    <input type="text" id="area" th:field="*{student.area}" />
+    <span style="color:red"
+          th:if="${#fields.hasErrors('student.area')}"
+          th:errors="*{student.area}">
+  </span>
   </div>
   <div>
     <label for="age">年齢:</label>
-    <input type="number" id="age" th:field="*{student.age}" required />
+    <input type="text" id="age" th:field="*{student.age}" />
+    <span style="color:red"
+          th:if="${#fields.hasErrors('student.age')}"
+          th:errors="*{student.age}">
+  </span>
   </div>
   <div>
     <label>性別:</label>
@@ -51,24 +76,25 @@
     <input type="text" id="remark" th:field="*{student.remark}" required />
   </div>
   <div>
-<!--    <input type="hidden" th:field="*{student.iDeleted}" value="false" />-->
-    <input type="checkbox" th:field="*{student.iDeleted}" value="true" />
-    <label th:for="${#ids.prev('student.iDeleted')}">キャンセル</label>
-  </div>
-  <div>
-    <label for="studentCourseId">受講コースID</label>
-    <input type="text" id="studentCourseId" th:field="*{courses[0].id}" />
+
+    <input type="hidden"
+           th:field="*{studentCourseList[0].studentId}" />
+
     <label for="course_name">受講コース名:</label>
-    <input type="hidden" th:field="*{courses[0].studentId}" />
-    <select id="course_name" th:field="*{courses[0].courseName}">
+    <select th:field="*{studentCourseList[0].courseName}">
       <option value="">選択してください</option>
-      <option th:each="name : ${courseNames}"
-              th:value="${name}"
-              th:text="${#strings.replace(name, 'Course', 'コース')}">
+      <option th:each="course : ${courseNames}"
+              th:value="${course}"
+              th:text="${course}">
       </option>
     </select>
+
+    <span style="color:red"
+          th:if="${#fields.hasErrors('studentCourseList[0].courseName')}"
+          th:errors="*{studentCourseList[0].courseName}">
+</span>
   </div>
-  <div>
+    <div>
     <button type="submit">更新</button>
   </div>
 </form>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2>受講生情報更新（ID検索）</h2>
+
+<form th:action="@{/students/update/search}" method="get">
+  <label>受講生ID</label>
+  <input type="text" name="id" />
+  <button type="submit">検索</button>
+</form>
+
+<p th:if="${errorMessage}" th:text="${errorMessage}" style="color:red"></p>
+
+</body>
+</html>
