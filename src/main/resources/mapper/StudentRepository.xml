@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="raisetech.StudentManagement.mapper.StudentRepository">
+
+  <!-- ========================= -->
+  <!-- ResultMap -->
+  <!-- ========================= -->
+  <resultMap id="studentResultMap" type="raisetech.StudentManagement.data.Student">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="kanaName" column="kana_name"/>
+    <result property="nickname" column="nickname"/>
+    <result property="email" column="email"/>
+    <result property="area" column="area"/>
+    <result property="age" column="age"/>
+    <result property="sex" column="sex"/>
+    <result property="remark" column="remark"/>
+    <result property="iDeleted" column="i_deleted"/>
+  </resultMap>
+
+  <!-- ========================= -->
+  <!-- 条件検索（XML定義） -->
+  <!-- ========================= -->
+  <select id="findById"
+    parameterType="java.lang.String"
+    resultMap="studentResultMap">
+    SELECT *
+    FROM students
+    WHERE id = #{id}
+  </select>
+
+
+  <!-- ========================= -->
+  <!-- 受講生 全件検索 -->
+  <!-- ========================= -->
+  <select id="search" resultMap="studentResultMap">
+    SELECT * FROM students
+  </select>
+
+
+
+  <!-- ========================= -->
+  <!-- 受講生 ID検索 -->
+  <!-- ========================= -->
+  <select id="searchStudent"
+    parameterType="java.lang.String"
+    resultMap="studentResultMap">
+    SELECT * FROM students WHERE id = #{id}
+  </select>
+
+  <!-- ========================= -->
+  <!-- コース 全件検索 -->
+  <!-- ========================= -->
+  <select id="searchByCondition"
+    parameterType="raisetech.StudentManagement.data.StudentSearchCondition"
+    resultMap="studentResultMap">
+    SELECT *
+    FROM students
+    <where>
+      <if test="name != null and name != ''">
+        AND name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="kanaName != null and kanaName != ''">
+        AND kana_name LIKE CONCAT('%', #{kanaName}, '%')
+      </if>
+      <if test="area != null and area != ''">
+        AND area = #{area}
+      </if>
+      <if test="age != null">
+        AND age = #{age}
+      </if>
+      <if test="sex != null and sex != ''">
+        AND sex = #{sex}
+      </if>
+    </where>
+  </select>
+
+
+  <!-- ========================= -->
+  <!-- 受講生IDに紐づくコース検索 -->
+  <!-- ========================= -->
+  <select id="searchStudentCourse"
+    parameterType="java.lang.String"
+    resultType="raisetech.StudentManagement.data.StudentCourse">
+    SELECT *
+    FROM students_courses
+    WHERE student_id = #{studentId}
+  </select>
+
+
+  <!-- ========================= -->
+  <!-- 受講生 登録 -->
+  <!-- ========================= -->
+  <insert id="insertStudent"
+    parameterType="raisetech.StudentManagement.data.Student"
+    useGeneratedKeys="true"
+    keyProperty="id">
+    INSERT INTO students
+    (name, kana_name, nickname, email, area, age, sex, remark, i_deleted)
+    VALUES
+    (#{name}, #{kanaName}, #{nickname}, #{email}, #{area}, #{age}, #{sex}, #{remark}, #{iDeleted})
+  </insert>
+
+  <!-- ========================= -->
+  <!-- コース 登録 -->
+  <!-- ========================= -->
+  <insert id="insertCourse"
+    parameterType="raisetech.StudentManagement.data.StudentCourse">
+    INSERT INTO students_courses
+    (student_id, course_name, course_start_at, course_end_at)
+    VALUES
+    (#{studentId}, #{courseName}, #{courseStartAt}, #{courseEndAt})
+  </insert>
+
+  <!-- ========================= -->
+  <!-- 受講生 更新 -->
+  <!-- ========================= -->
+  <update id="updateStudent"
+    parameterType="raisetech.StudentManagement.data.Student">
+    UPDATE students
+    SET
+    name = #{name},
+    kana_name = #{kanaName},
+    nickname = #{nickname},
+    email = #{email},
+    area = #{area},
+    age = #{age},
+    sex = #{sex},
+    remark = #{remark},
+    i_deleted = #{iDeleted}
+    WHERE id = #{id}
+  </update>
+
+  <!-- ========================= -->
+  <!-- コース 更新 -->
+  <!-- ========================= -->
+  <update id="updateCourse"
+    parameterType="raisetech.StudentManagement.data.StudentCourse">
+    UPDATE students_courses
+    SET
+    course_name = #{courseName},
+    course_start_at = #{courseStartAt},
+    course_end_at = #{courseEndAt}
+    WHERE id = #{id}
+  </update>
+
+  <!-- ========================= -->
+  <!-- 論理削除 -->
+  <!-- ========================= -->
+  <update id="deleteStudent" parameterType="java.lang.String">
+    UPDATE students
+    SET i_deleted = true
+    WHERE id = #{id}
+  </update>
+
+  <select id="searchStudentCourseList"
+    resultType="raisetech.StudentManagement.data.StudentCourse">
+    SELECT * FROM students_courses
+  </select>
+
+  <update id="updateStatus">
+    UPDATE application_status
+    SET status = #{status}
+    WHERE student_course_id = #{studentCourseId}
+  </update>
+
+</mapper>
