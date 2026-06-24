@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>申込状況</title>
+</head>
+<body>
+
+<div th:replace="~{common/header :: header}"></div>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>コース名</th>
+    <th>申込状況</th>
+    <th>変更</th>
+  </tr>
+
+  <tr th:each="course : ${courses}">
+    <td th:text="${course.id}"></td>
+    <td th:text="${course.courseName}"></td>
+    <td th:text="${course.status}"></td>
+    <td>
+      <form th:action="@{/view/updateStatus}" method="post">
+        <input type="hidden" name="statusId"
+               th:value="${course.id}" />
+
+        <select name="status">
+          <option value="仮申込"
+                  th:selected="${course.status == '仮申込'}">仮申込</option>
+
+          <option value="本申込"
+                  th:selected="${course.status == '本申込'}">本申込</option>
+
+          <option value="受講中"
+                  th:selected="${course.status == '受講中'}">受講中</option>
+
+          <option value="受講終了"
+                  th:selected="${course.status == '受講終了'}">受講終了</option>
+        </select>
+
+        <button type="submit">更新</button>
+      </form>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
